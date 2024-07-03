@@ -64,9 +64,12 @@ zmodel.matrix <- function(trms, data, contrasts.arg = NULL)
   if (attr(trms, "intercept") == 1) attr(modelmatrix, "assign") <- 0:length(termlabs)
   else attr(modelmatrix, "assign") <- 1:length(termlabs)
   if (length(interactions) != 0) {
-    attr(modelmatrix, "dimnames") <- list(as.character(1:length(modelframe[,1])), c("(intercept)", prednames, interactions)) # Fix the dimnames to match those on standard model matrices.
+    if (attr(trms, "intercept") == 1) attr(modelmatrix, "dimnames") <- list(as.character(1:length(modelframe[,1])), c("(intercept)", prednames, interactions)) # Fix the dimnames to match those on standard model matrices.
+    else attr(modelmatrix, "dimnames") <- list(as.character(1:length(modelframe[,1])), c(prednames, interactions))
+  } else {
+    if (attr(trms, "intercept") == 1) attr(modelmatrix, "dimnames") <- list(as.character(1:length(modelframe[,1])), c("(intercept)", prednames)) # Fix the dimnames to match those on standard model matrices.
+    else attr(modelmatrix, "dimnames") <- list(as.character(1:length(modelframe[,1])), prednames)
   }
-  else attr(modelmatrix, "dimnames") <- list(as.character(1:length(modelframe[,1])), c("(intercept)", prednames)) # Fix the dimnames to match those on standard model matrices.
   return(modelmatrix)
 }
 
